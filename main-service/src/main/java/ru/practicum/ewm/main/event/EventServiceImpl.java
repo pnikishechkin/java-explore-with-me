@@ -341,8 +341,8 @@ public class EventServiceImpl implements EventService {
         Event event = eventRepository.findById(eventId).orElseThrow(() -> new NotFoundException(
                 "Ошибка! Категории с заданным идентификатором не существует"));
 
-        if (event.getInitiator().getId().equals(user.getId())) {
-            // TODO ошибка: событие другого пользователя
+        if (!event.getInitiator().getId().equals(user.getId())) {
+            throw new ConflictException("Ошибка! Событие принадлежит другому пользователю!");
         }
 
         List<Request> requests = requestRepository.findByEventId(eventId);
